@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset=utf-8">
+    <title>Swipe</title>
+    <link rel=stylesheet href="style.css">
+    <meta name=viewport content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id=slider class="swipe notransition">
+      <div class="slide">a</div>
+      <div class="slide">b</div>
+      <div class="slide">c</div>
+      <div class="slide">d</div>
+      <div class="slide">e</div>
+      <div class="slide">f</div>
+    </div>
+    <button onclick="mySwipe.prev()">Prev</button>
+    <button onclick="mySwipe.next()">Next</button>
+    <button onclick="alert(mySwipe.getPos())">getPos</button>
+    <button onclick="mySwipe.slide(0)">slide to index 0</button>
+    <button onclick="mySwipe.slide(5)">slide to index 5</button>
+    <button onclick="$('#slider').width($('#slider').width() * 1.2); $('#slider').height($('#slider').height() * 1.2);">bigger</button>
+    <button onclick="$('#slider').width($('#slider').width() / 1.2); $('#slider').height($('#slider').height() / 1.2);">smaller</button>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="swipe.js"></script>
+  </body>
+</html>
