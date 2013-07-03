@@ -1,22 +1,36 @@
-===Swipe===
+Swipe
+=====
+
+A tiny touchable slider based on jQuery. 
 
 Set up
+------
 
 ````
+// Include jQuery + my JS and CSS files, and write this when the page is loaded:
 
 var mySwipe = Swipe(document.getElementById('slider'), {
-  startSlide: (integer),
-  speed: 300,
-  callback: function(index, elem) { alert("callback"); },
+  startSlide: (integer),                                           // default starting slide index: 0
+  speed: (integer),                                                // default transition speed: 300ms
+  callback: function(index, elem) { alert("callback"); },         
   transitionEnd: function(index, elem) { alert("transitionend"); }
 });
 
 ````
 
 API
+---
 
 ````
-mySwipe.prev();
-mySwipe.next();
-n = mySwipe.getPos();
-mySwipe.slide(n);
+mySwipe.prev();       // Previous slide
+mySwipe.next();       // Next slide
+n = mySwipe.getPos(); // Get current slide index (start at 0)
+mySwipe.slide(n);     // Set current slide index
+
+````
+
+Demo
+----
+
+http://xem.github.io/swipe
+
