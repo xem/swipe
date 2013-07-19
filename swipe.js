@@ -26,6 +26,12 @@ function Swipe(slider, params){
         this.currentSlide.nextAll().addClass("rightslide").removeClass("currentslide leftslide");
         this.currentIndex = index;
       }
+			$(swipe.slider).find(".slide.currentslide").css("left", 0);
+			$(swipe.slider).find(".slide.leftslide").css("left", -$(this.slider).outerWidth());
+			$(swipe.slider).find(".slide.rightslide").css("left", $(this.slider).outerWidth());
+			setTimeout(function(){
+				$(swipe.slider).find(".slide").css("left", "");
+			},300);
     },
     
     // Previous slide
@@ -35,11 +41,8 @@ function Swipe(slider, params){
     next: function(){ this.slide(this.currentIndex + 1); }
   };
   
-  // Show starting slide
+  // Show first slide
   swipe.slide(params.startSlide || 0);
-  
-  // Set default speed
-  swipe.speed = params.speed || 300;
   
   // Enable transitions
   setTimeout(function(){ $(swipe.slider).removeClass("notransition"); }, swipe.speed);
@@ -50,55 +53,58 @@ function Swipe(slider, params){
   // Touch start
   $(slider).on("touchstart", function(e){
 
-    // Disable transitions
-    $(swipe.slider).addClass("notransition");
-    
-    // Save finger position
-    swipe.x = e.originalEvent.changedTouches[0].pageX - e.currentTarget.offsetLeft;
+		// Disable transitions
+		$(swipe.slider).addClass("notransition");
+	
+		// Save finger position
+		swipe.x = e.originalEvent.changedTouches[0].pageX - e.currentTarget.offsetLeft;
 
   })
   
   // Touch move
   .on("touchmove", function(e){
     
-    // Disable native scroll
-    e.preventDefault();
-    
-    // Get finger position
-    var x = e.originalEvent.changedTouches[0].pageX - e.currentTarget.offsetLeft;
-    
-    // Get finger speed and direction
-    swipe.vx = x - swipe.x;
-    
-    // Save finger position
-    swipe.x = x;
-    
-    // Move current slide and neighbours
-    swipe.currentSlide.css("left", parseInt(swipe.currentSlide.css("left")) + swipe.vx);
-    swipe.currentSlide.next().css("left", parseInt(swipe.currentSlide.next().css("left")) + swipe.vx);
-    swipe.currentSlide.prev().css("left", parseInt(swipe.currentSlide.prev().css("left")) + swipe.vx);
+		if(!$(e.target).hasClass("noswipe") && !$(e.target).parents().hasClass("noswipe")){
+		
+			// Disable native scroll
+			e.preventDefault();
+			
+			// Get finger position
+			var x = e.originalEvent.changedTouches[0].pageX - e.currentTarget.offsetLeft;
+			
+			// Get finger speed and direction
+			swipe.vx = x - swipe.x;
+			
+			// Save finger position
+			swipe.x = x;
+			
+			// Move current slide and neighbours
+			swipe.currentSlide.css("left", parseInt(swipe.currentSlide.css("left")) + swipe.vx);
+			swipe.currentSlide.next().css("left", parseInt(swipe.currentSlide.next().css("left")) + swipe.vx);
+			swipe.currentSlide.prev().css("left", parseInt(swipe.currentSlide.prev().css("left")) + swipe.vx);
+			
+		}
     
   })
   
   // Touch end
   .on("touchend", function(e){
-  
-    // Enable transitions
-    $(swipe.slider).removeClass("notransition");
-    
-    // Reset slides position to auto
-    $(swipe.slider).find(".slide").css("left", "");
-    
-    /*sl = document.body.scrollLeft;
-    sl += dir * vw / 3;
-    $('body').animate(
-      {scrollLeft: vw * Math.round(sl/vw)},
-      200
-    );
-    $("video").each(function(){
-      this.pause();
-    });
-    $("video").get(Math.round(sl/vw) - 1).play();*/
+		console.log();
+    if(!$(e.target).hasClass("noswipe") && !$(e.target).parents().hasClass("noswipe")){
+		
+			// Enable transitions
+			$(swipe.slider).removeClass("notransition");
+			
+			if(swipe.vx > 0){
+				swipe.prev();
+			}
+			
+			if(swipe.vx < 0){
+				swipe.next();
+			}
+		
+		}
+		
     
   });
   
@@ -116,7 +122,6 @@ function Swipe(slider, params){
 // test
 var mySwipe = Swipe(document.getElementById('slider'), {
   startSlide: 2,
-  speed: 300,
   callback: function(index, elem) { alert("callback"); },
   transitionEnd: function(index, elem) { alert("transitionend"); }
 });
